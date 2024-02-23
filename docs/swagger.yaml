@@ -1,0 +1,152 @@
+basePath: /
+definitions:
+  main.parameters:
+    properties:
+      task:
+        type: string
+    type: object
+  main.taskEntry:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: integer
+      task:
+        type: string
+      updated_at:
+        type: string
+    type: object
+host: localhost:9090
+info:
+  contact: {}
+  description: Task/To-Do management API. This API allows you to create, read, update,
+    and delete tasks.
+  title: Simple Task API
+  version: "1.0"
+paths:
+  /tasks:
+    get:
+      description: Get a list of all tasks sorted by ID
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/main.taskEntry'
+            type: array
+      summary: List all tasks
+    post:
+      consumes:
+      - application/json
+      description: Add a new task to the list
+      parameters:
+      - description: Task to add
+        in: body
+        name: task
+        required: true
+        schema:
+          $ref: '#/definitions/main.parameters'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/main.taskEntry'
+        "400":
+          description: task content cannot be empty
+          schema:
+            type: string
+        "500":
+          description: invalid json payload
+          schema:
+            type: string
+      summary: Create a new task
+  /tasks/{taskID}:
+    delete:
+      description: Remove a task by ID
+      parameters:
+      - description: Task ID
+        in: path
+        name: taskID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.taskEntry'
+        "400":
+          description: taskID parameter not supplied or invalid
+          schema:
+            type: string
+        "404":
+          description: task not found
+          schema:
+            type: string
+      summary: Delete a task
+    get:
+      description: Get details of a specific task by ID
+      parameters:
+      - description: Task ID
+        in: path
+        name: taskID
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.taskEntry'
+        "400":
+          description: taskID parameter is missing or invalid
+          schema:
+            type: string
+        "404":
+          description: task does not exist
+          schema:
+            type: string
+      summary: Get a task by ID
+    put:
+      consumes:
+      - application/json
+      description: Update an existing task by ID
+      parameters:
+      - description: Task ID
+        in: path
+        name: taskID
+        required: true
+        type: integer
+      - description: Task information
+        in: body
+        name: task
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/main.taskEntry'
+        "400":
+          description: taskID parameter not supplied or invalid
+          schema:
+            type: string
+        "404":
+          description: task not found
+          schema:
+            type: string
+        "500":
+          description: invalid json payload
+          schema:
+            type: string
+      summary: Update a task
+swagger: "2.0"

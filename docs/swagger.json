@@ -1,0 +1,229 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Task/To-Do management API. This API allows you to create, read, update, and delete tasks.",
+        "title": "Simple Task API",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "localhost:9090",
+    "basePath": "/",
+    "paths": {
+        "/tasks": {
+            "get": {
+                "description": "Get a list of all tasks sorted by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "List all tasks",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/main.taskEntry"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Add a new task to the list",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Create a new task",
+                "parameters": [
+                    {
+                        "description": "Task to add",
+                        "name": "task",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/main.parameters"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/main.taskEntry"
+                        }
+                    },
+                    "400": {
+                        "description": "task content cannot be empty",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "invalid json payload",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/tasks/{taskID}": {
+            "get": {
+                "description": "Get details of a specific task by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Get a task by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Task ID",
+                        "name": "taskID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/main.taskEntry"
+                        }
+                    },
+                    "400": {
+                        "description": "taskID parameter is missing or invalid",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "task does not exist",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update an existing task by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Update a task",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Task ID",
+                        "name": "taskID",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Task information",
+                        "name": "task",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/main.taskEntry"
+                        }
+                    },
+                    "400": {
+                        "description": "taskID parameter not supplied or invalid",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "task not found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "invalid json payload",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Remove a task by ID",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Delete a task",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Task ID",
+                        "name": "taskID",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/main.taskEntry"
+                        }
+                    },
+                    "400": {
+                        "description": "taskID parameter not supplied or invalid",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "task not found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "main.parameters": {
+            "type": "object",
+            "properties": {
+                "task": {
+                    "type": "string"
+                }
+            }
+        },
+        "main.taskEntry": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "task": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
